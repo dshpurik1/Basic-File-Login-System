@@ -1,7 +1,7 @@
 #   Danil Shpurik
 #   CSCI 101 - Section F                                                
 #   Create Project
-#   References: Zybooks for using functions, file I/O
+#   References: Zybooks for using functions and file I/O
 #   Time: Many Minutes
 
 def encrypt(secret_info):
@@ -26,18 +26,34 @@ def decrypt(secret_info):
         
     return decrypted_line
 
-print('Welcome to the your PersonalVault™!')
-print('+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+')
-print('Are you a new user?')
-choice = ''
-while choice != '1' or choice != '2':
+def check_choice():
     print('[1] YES')
     print('[2] NO')
     choice = input('CHOICE> ')
+
     if choice == '1' or choice == '2':
-        break
-    print('Incorrect option! Try again.')
+        return choice
+    else:
+        print('Incorrect option! Try again.')
+        return check_choice()
     
+def input_message():
+    message = input('SECRET MESSAGE> ')
+    print('Cool, your account named', "'" + user + "'", 'will store this message:')
+    print('\n"' + message + '"\n')
+    print('Does that sound good with you?')
+    choice = check_choice()
+    if choice == '1':
+        return message
+    else:
+        print('Alright, how about you type a new message?')
+        return input_message()
+
+print('Welcome to the your PersonalVault™!')
+print('+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+')
+print('Are you a new user?')
+choice = check_choice()    
+
 with open('data.txt', 'r') as data:
     info = data.readlines()
 
@@ -58,6 +74,7 @@ while n in range(len(info)):
     n += 3
     
 print('***************************************************************')
+
 if choice == '1':
 
     condition = True
@@ -82,28 +99,12 @@ if choice == '1':
         if password == confirm:
             break
         print('Your passwords do not match. Please retype and confirm your password')
+
     print('***************************************************************')
     print('Sweet! You now have a safe account that can store a message.')
     print('How about you type that message now to store it for later.')
-
-    while True:
-        message = input('SECRET MESSAGE> ')
-        print('Cool, your account named', "'" + user + "'", 'will store this message:')
-        print('\n"' + message + '"\n')
-        print('Does that sound good with you?')
-        choice = ''
-        while choice != '1' or choice != '2':
-            print('[1] YES')
-            print('[2] NO')
-            choice = input('CHOICE> ')
-            if choice == '1':
-                break
-            elif choice == '2':
-                print('Alright, how about you type a new message?')
-                break
-            print('Incorrect option! Try again.')
-        if choice == '1':
-            break
+    message = input_message()
+    
     with open('data.txt', 'a') as data:
         data.write('\n')
         data.write(encrypt(user))
@@ -132,38 +133,10 @@ else:
     print('Here is the current message in your account:')
     print('\n"' + secret_data[i - 1] + '"')
     print('\nWould you like to change your secret message?')
-    choice = ''
-    condition = True
-    while choice != '1' or choice != '2':
-        print('[1] YES')
-        print('[2] NO')
-        choice = input('CHOICE> ')
-        if choice == '2':
-            condition = False
-            break
-        elif choice == '1':
-            print('Alright, how about you type a new message?')
-            break
-        print('Incorrect option! Try again.')
-    while condition == True:
-        message = input('SECRET MESSAGE> ')
-        print('Cool, your account named', "'" + user + "'", 'will store this message:')
-        print('\n"' + message + '"')
-        print('\nDoes that sound good with you?')
-        choice = ''
-        while choice != '1' or choice != '2':
-            print('[1] YES')
-            print('[2] NO')
-            choice = input('CHOICE> ')
-            if choice == '1':
-                break
-            elif choice == '2':
-                print('Alright, how about you type a new message?')
-                break
-            print('Incorrect option! Try again.')
-        if choice == '1':
-            break
-    if condition == True:
+    choice = check_choice()
+    if choice == '1':
+        print('Alright, how about you type a new message?')
+        message = input_message()
         i *= 3
         info[i] = encrypt(message) + '\n'
         with open('data.txt', 'w') as data:
@@ -181,4 +154,3 @@ with open('data.txt', 'w') as info:
 
 print('+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+')
 print('Thank you', user, 'for using PersonalVault™!')
-    
