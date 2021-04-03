@@ -1,8 +1,3 @@
-#   Danil Shpurik
-#   CSCI 101 - Section F                                                
-#   Create Project
-#   References: Zybooks for using functions and file I/O
-#   Time: Many Minutes
 
 def encrypt(secret_info):
 
